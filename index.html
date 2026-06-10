@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Brawl Stars Казино | 100+ СЕКРЕТНЫХ БОЙЦОВ | Мегаящики, 100 ящиков, Flappy Bit</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body { background: linear-gradient(145deg, #0c1c21 0%, #030b0f 100%); font-family: 'Segoe UI', 'Poppins', system-ui, 'Courier New', monospace; color: #f5f2e8; padding: 30px 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .main-container { max-width: 1200px; width: 100%; margin: 0 auto; background: rgba(0, 0, 0, 0.35); border-radius: 64px; padding: 24px 28px; backdrop-filter: blur(2px); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(16px); border-radius: 80px; padding: 12px 28px; margin-bottom: 30px; border: 1px solid rgba(255, 200, 100, 0.5); }
+        .logo h1 { font-size: 1.8rem; background: linear-gradient(135deg, #FFE484, #FFA41B); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .logo p { font-size: 0.75rem; color: #ffcd7e; }
+        .coin-balance { background: #1f2f2c; padding: 6px 24px; border-radius: 60px; display: flex; align-items: center; gap: 12px; font-size: 1.8rem; font-weight: bold; border: 1px solid #f5b642; }
+        .balance-amount { color: #FFE484; }
+        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 40px; }
+        .lootbox-section { background: radial-gradient(circle at 20% 30%, #2f4649, #102127); border-radius: 48px; padding: 25px 15px; text-align: center; border: 1px solid #ffcf7a; position: relative; overflow: hidden; }
+        .crate-container { position: relative; display: inline-block; margin: 10px auto; }
+        .crate { background: #cb842e; background-image: radial-gradient(circle at 35% 40%, #ffbc61, #b45f1f); width: 200px; height: 180px; border-radius: 45px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.1s ease; box-shadow: 0 12px 0 #6b3e0e; position: relative; z-index: 2; }
+        .crate:active { transform: translateY(5px); box-shadow: 0 5px 0 #6b3e0e; }
+        .crate span:first-child { font-size: 4.5rem; transition: transform 0.2s; }
+        .crate p { font-weight: 800; font-size: 1.5rem; background: #2f1c0a; padding: 4px 18px; border-radius: 50px; margin-top: 8px; }
+        @keyframes shakeCrate { 0% { transform: translate(0px, 0px) rotate(0deg); } 20% { transform: translate(-6px, 2px) rotate(-3deg); } 40% { transform: translate(6px, -2px) rotate(3deg); } 60% { transform: translate(-4px, 1px) rotate(-2deg); } 80% { transform: translate(4px, -1px) rotate(2deg); } 100% { transform: translate(0px, 0px) rotate(0deg); } }
+        @keyframes glowCrate { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7), 0 12px 0 #6b3e0e; } 50% { box-shadow: 0 0 20px 10px rgba(255, 200, 0, 1), 0 12px 0 #6b3e0e; } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7), 0 12px 0 #6b3e0e; } }
+        @keyframes openCrate { 0% { transform: scale(1) rotate(0deg); opacity: 1; } 30% { transform: scale(1.2) rotate(10deg); } 70% { transform: scale(0.9) rotate(-5deg); } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+        @keyframes particleFly { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
+        @keyframes rainbowFlash { 0% { text-shadow: 0 0 5px red; } 25% { text-shadow: 0 0 15px yellow; } 50% { text-shadow: 0 0 10px lime; } 75% { text-shadow: 0 0 15px cyan; } 100% { text-shadow: 0 0 5px magenta; } }
+        .shake-active { animation: shakeCrate 0.3s ease-in-out, glowCrate 0.4s ease-out; }
+        .open-animation { animation: openCrate 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) !important; }
+        .particle, .spark { position: absolute; pointer-events: none; z-index: 100; animation: particleFly 0.6s ease-out forwards; }
+        .particle { width: 12px; height: 12px; background: radial-gradient(circle, #ffcc44, #ff8800); border-radius: 50%; }
+        .spark { width: 6px; height: 6px; background: #fff7a0; border-radius: 50%; animation-duration: 0.5s; }
+        .secret-animation { animation: rainbowFlash 0.5s ease-in-out 3; }
+        .open-btn { background: linear-gradient(120deg, #FFB347, #FF8C1A); border: none; padding: 12px 32px; font-size: 1.3rem; font-weight: bold; border-radius: 60px; margin: 15px 0 10px; cursor: pointer; box-shadow: 0 7px 0 #964B1E; transition: 0.05s linear; }
+        .open-btn:active { transform: translateY(3px); }
+        .open-btn:disabled, .open-100-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .open-100-btn { background: linear-gradient(120deg, #9b59b6, #8e44ad); border: none; padding: 12px 28px; font-size: 1.2rem; font-weight: bold; border-radius: 60px; margin: 8px 0; cursor: pointer; box-shadow: 0 7px 0 #5e3370; width: 90%; }
+        .open-100-btn:active { transform: translateY(3px); }
+        .result-area { background: #05161cd9; border-radius: 40px; padding: 15px; min-height: 120px; backdrop-filter: blur(8px); border: 1px solid #ffcf6e; font-size: 0.9rem; transition: 0.1s; overflow-y: auto; max-height: 200px; }
+        .shop-section { background: #10272ed9; border-radius: 48px; padding: 25px 18px; backdrop-filter: blur(6px); border: 1px solid #ffdd99; }
+        .shop-section h2 { text-align: center; font-size: 1.6rem; margin-bottom: 20px; }
+        .coin-cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; margin-bottom: 25px; }
+        .coin-card { background: #1f3a36; padding: 18px 12px; border-radius: 40px; text-align: center; width: 150px; transition: 0.2s; border: 1px solid #ffcf70; cursor: pointer; }
+        .coin-card:hover { transform: translateY(-5px); background: #2b4f49; }
+        .coin-amount { font-size: 2rem; font-weight: bold; color: #FFE484; }
+        .buy-btn { background: #f0a52e; border: none; padding: 8px 18px; border-radius: 50px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .donate-title { text-align: center; font-size: 1.3rem; margin: 15px 0 10px; color: #ffd966; border-top: 1px solid #ffcf6e; padding-top: 18px; }
+        .roster { background: rgba(0, 0, 0, 0.55); border-radius: 48px; padding: 20px; margin-bottom: 35px; backdrop-filter: blur(12px); border: 1px solid #ffcd7e; }
+        .brawlers-grid { display: flex; flex-wrap: wrap; gap: 10px; max-height: 260px; overflow-y: auto; padding: 5px; }
+        .brawler-card { background: #1b2a27; border-radius: 60px; padding: 4px 16px; display: flex; align-items: center; gap: 8px; border-left: 5px solid gold; font-size: 0.85rem; }
+        .brawler-card.secret { border-left: 5px solid #ff44aa; background: #2a1f2e; box-shadow: 0 0 6px #ff66cc; }
+        .rarity { font-size: 0.65rem; background: #2c281f; padding: 2px 8px; border-radius: 30px; }
+        .secret-rarity { background: #9b30ff; color: white; }
+        .game-separator { text-align: center; margin: 20px 0 20px; font-size: 1.4rem; font-weight: bold; background: #ffcf6e33; padding: 8px; border-radius: 60px; }
+        .flappy-wrapper { background: #000000aa; border-radius: 48px; padding: 16px 20px 20px; backdrop-filter: blur(4px); border: 1px solid #ffd966; margin-top: 10px; }
+        .flappy-canvas { display: block; margin: 0 auto; border-radius: 28px; box-shadow: 0 8px 18px rgba(0,0,0,0.5); cursor: pointer; background: #4aa0c0; width: 100%; max-width: 400px; height: auto; }
+        .info-panel { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; gap: 15px; flex-wrap: wrap; padding: 6px 18px; background: #0b1b1fcc; border-radius: 50px; }
+        .score-box { background: #1e2f2c; padding: 4px 18px; border-radius: 40px; font-size: 1.2rem; font-weight: bold; }
+        .best-box { background: #1a2724; padding: 4px 18px; border-radius: 40px; font-size: 1rem; }
+        .restart-btn { background: #e2a526; border: none; padding: 6px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        .controls-tip { font-size: 0.7rem; background: #00000088; padding: 4px 12px; border-radius: 30px; display: inline-block; }
+        @media (max-width: 860px) { .main-container { padding: 16px; } .game-grid { grid-template-columns: 1fr; gap: 20px; } .header { flex-direction: column; text-align: center; } .crate { width: 170px; height: 160px; } }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <div class="header">
+        <div class="logo"><h1>⚡ BRAWL CASINO ⚡</h1><p>100+ СЕКРЕТНЫХ БОЙЦОВ | Мегаящики | 100 ящиков</p></div>
+        <div class="coin-balance"><span>🪙</span><span class="balance-amount" id="coinBalance">1500</span><span>монет</span></div>
+    </div>
+    <div class="game-grid">
+        <div class="lootbox-section">
+            <h2>🎁 МЕМНЫЙ МЕГАЯЩИК 🎁</h2>
+            <div class="crate-container" id="crateContainer">
+                <div class="crate" id="crateAnim">
+                    <span>📦</span>
+                    <p>MEME</p>
+                </div>
+            </div>
+            <div class="crate-cost">⚡ Цена 1 открытия: <strong style="color:#FFE484">100 🪙</strong></div>
+            <button class="open-btn" id="openCrateBtn">🔥 ОТКРЫТЬ 1 КЕЙС 🔥</button>
+            <button class="open-100-btn" id="open100CrateBtn">💥 ОТКРЫТЬ 100 ЯЩИКОВ РАЗОМ 💥<br><span style="font-size:0.7rem;">(стоимость 9000 монет + секретные бойцы)</span></button>
+            <div class="result-area" id="resultArea">✨ Нажми на мегаящик — выпадают мемные и СЕКРЕТНЫЕ бойцы! ✨<br>🔮 Секретные выпадают ТОЛЬКО при открытии 100 ящиков разом!</div>
+        </div>
+        <div class="shop-section">
+            <h2>🏪 КУПИТЬ КЕЙСЫ ЗА МОНЕТЫ 🪙</h2>
+            <div class="coin-cards" id="shopCoinsContainer"></div>
+            <div class="donate-title">💎 ДОНАТ 💎 (покупка монет)</div>
+            <div class="coin-cards" id="donateContainer"></div>
+            <p style="text-align: center; margin-top: 18px; font-size: 0.75rem;">💎 Монеты можно заработать в игре или купить за донат. Коллекция: 100 обычных + 10 секретных!</p>
+        </div>
+    </div>
+    <div class="roster"><h3>📦 ТВОЯ КОЛЛЕКЦИЯ БОЙЦОВ <span style="font-size:0.9rem;">(обычные: <span id="collectionCount">0</span>/100 | секретные: <span id="secretCount">0</span>/10)</span></h3><div id="brawlersList" class="brawlers-grid"><div class="empty-msg">📭 Здесь будут бойцы после открытия кейсов!</div></div></div>
+    <div class="game-separator">🎮 ↓ ЗАРАБАТЫВАЙ МОНЕТЫ В ИГРЕ FLAPPY BIT (или ДОНАТ) ↓ 🎮</div>
+    <div class="flappy-wrapper">
+        <canvas id="flappyCanvas" class="flappy-canvas" width="400" height="550"></canvas>
+        <div class="info-panel">
+            <div class="score-box">🐦 СЧЁТ: <span id="scoreValue">0</span></div>
+            <div class="best-box">🏆 РЕКОРД: <span id="bestValue">0</span></div>
+            <button class="restart-btn" id="restartButton">🔄 НОВАЯ ИГРА</button>
+        </div>
+        <div class="controls-tip"><span>👉 ПРОБЕЛ / ЛКМ / ТАП — ЛЕТЕТЬ ВВЕРХ | КАЖДОЕ ОЧКО = +5 МОНЕТ 👈</span></div>
+    </div>
+</div>
+
+<script>
+    // *************************************************************
+    // ********** 100 МЕМНЫХ БОЙЦОВ + 10 СЕКРЕТНЫХ ****************
+    // *************************************************************
+    (function() {
+        // 100 обычных мемных бойцов
+        const memeNames = [
+            "Губка Боб", "Слышь", "Жорик", "Базированный", "Человек-паук", "Спанч Боб", "Амонг Ас", "Сус", "Ха-ха-ха", "Лох", "Кринж", "Батя", "Сигма", "Странный чел", "Печенька", "Жмур",
+            "Бумер", "Зумер", "Челленджер", "ТикТокер", "Шиза", "Нормис", "Альфач", "Бета", "Гигачад", "Войс", "Пиксель", "Байт", "Киберпанк", "Фурри", "Пон", "Сова", "Котэ", "Пёс", "Хомяк",
+            "Мемодед", "Лололошка", "Шрек", "Фиона", "Осел", "Кот в сапогах", "Малефисента", "Дед инсайд", "Хайп", "Фейк", "Ньюс", "Спойлер", "База", "Краш", "Токсик", "Читер", "Грифер", "Симп",
+            "Тян", "Кун", "Семпай", "Кавай", "Яойщик", "Фуджи", "Комикс", "Анимешник", "Думер", "Крамер", "Вайб", "Слайм", "Рофлан", "Пруф", "Сорян", "Извинятель", "Хейтер", "Фанбой", "Косплей",
+            "Мемас", "Паблик", "Лайк", "Дизлайк", "Подписка", "Коллаб", "Стример", "Донатер", "Спонсор", "Реклама", "Интеграция", "Промокод", "Скидка", "Бесплатно", "Турнир", "Лобби", "Рейд",
+            "Бафф", "Нерф", "Патч", "Баг", "Фикс", "Лаг", "Пинг", "Фпс", "Турбо", "Респавн", "Лутбокс", "Скилл", "КД", "ММР"
+        ];
+        const finalMemeList = memeNames.slice(0, 100);
+        const MEME_BRAWLERS = finalMemeList.map((name, idx) => {
+            let rarity = "Обычный";
+            let emoji = "😐";
+            if (idx < 8) { rarity = "Легендарный"; emoji = ["🧽","🤨","🐗","🗿","🕷️","🍔","👽","😳"][idx] || "⭐"; }
+            else if (idx < 20) { rarity = "Эпический"; emoji = ["🤡","🤦","😬","🧔","🧠","👾","🍪","🐱","🦾","🤖","👻","💀"][idx-8] || "💎"; }
+            else if (idx < 40) { rarity = "Сверхредкий"; emoji = ["🔥","💨","✨","🌟","⭐","⚡","🌀","🌊","🎭","📱","💻","🎮","🕹️","📺","🎬","🎤","🎧","📷","🎥","📡"][idx-20] || "🌀"; }
+            else if (idx < 70) { rarity = "Редкий"; emoji = ["🔫","💰","💎","👑","🎩","🧢","👟","🥾","🧤","🧦","👕","👖","🧥","👔","👗","👘","🥻","🩴","🩰","🎒","📚","✏️","📏","📎","📌","🔗"][idx-40] || "📦"; }
+            else { rarity = "Обычный"; emoji = ["📦","🪣","🧸","🎈","🎉","🎊","🎁","🔔","🕰️","⌛","⏳","⌚","📱","💡","🔦","🕯️","📻","📀","💿","📼","🔋","🪫","🧲","🔮","🧿","🎴","🃏","🀄","🎲","🎯"][idx-70] || "🎲"; }
+            let weight = 30;
+            if (rarity === "Легендарный") weight = 2;
+            else if (rarity === "Эпический") weight = 7;
+            else if (rarity === "Сверхредкий") weight = 14;
+            else if (rarity === "Редкий") weight = 24;
+            else weight = 36;
+            return { name, rarity, emoji, weight, secret: false };
+        });
+        
+        // 10 СЕКРЕТНЫХ БОЙЦОВ (выпадают ТОЛЬКО при открытии 100 ящиков)
+        const SECRET_BRAWLERS = [
+            { name: "ХАЛЯВА", rarity: "СЕКРЕТНЫЙ", emoji: "💎", weight: 1, secret: true },
+            { name: "РАДОСТЬ", rarity: "СЕКРЕТНЫЙ", emoji: "✨", weight: 1, secret: true },
+            { name: "УДАЧА", rarity: "СЕКРЕТНЫЙ", emoji: "🍀", weight: 1, secret: true },
+            { name: "ЛЕГЕНДА", rarity: "СЕКРЕТНЫЙ", emoji: "🏆", weight: 1, secret: true },
+            { name: "МИСТИК", rarity: "СЕКРЕТНЫЙ", emoji: "🔮", weight: 1, secret: true },
+            { name: "ГЕНИЙ", rarity: "СЕКРЕТНЫЙ", emoji: "🧠", weight: 1, secret: true },
+            { name: "ФОРТУНА", rarity: "СЕКРЕТНЫЙ", emoji: "🎰", weight: 1, secret: true },
+            { name: "БЕСКОНЕЧНОСТЬ", rarity: "СЕКРЕТНЫЙ", emoji: "♾️", weight: 1, secret: true },
+            { name: "ТИТАН", rarity: "СЕКРЕТНЫЙ", emoji: "🗿", weight: 1, secret: true },
+            { name: "БОГ", rarity: "СЕКРЕТНЫЙ", emoji: "👑", weight: 1, secret: true }
+        ];
+        
+        const ALL_BRAWLERS = [...MEME_BRAWLERS, ...SECRET_BRAWLERS];
+        let totalWeight = MEME_BRAWLERS.reduce((s,b)=>s+b.weight,0); // для обычных ящиков секретки не входят
+        
+        function getRandomBrawler(includeSecret = false) {
+            let source = includeSecret ? ALL_BRAWLERS : MEME_BRAWLERS;
+            let weightSum = source.reduce((s,b)=>s+b.weight,0);
+            let r = Math.random() * weightSum;
+            let acc = 0;
+            for(let b of source) { acc += b.weight; if(r <= acc) return {...b}; }
+            return source[0];
+        }
+        
+        let globalCoins = 1500;
+        let ownedBrawlers = []; // все бойцы
+        let secretOwned = [];
+        
+        const coinSpan = document.getElementById("coinBalance");
+        const openBtn = document.getElementById("openCrateBtn");
+        const open100Btn = document.getElementById("open100CrateBtn");
+        const resultArea = document.getElementById("resultArea");
+        const brawlersDiv = document.getElementById("brawlersList");
+        const collectionSpan = document.getElementById("collectionCount");
+        const secretCountSpan = document.getElementById("secretCount");
+        const crateElement = document.getElementById("crateAnim");
+
+        function updateUI() {
+            coinSpan.innerText = Math.floor(globalCoins);
+            openBtn.disabled = (globalCoins < 100);
+            open100Btn.disabled = (globalCoins < 9000);
+            const normalCount = ownedBrawlers.filter(b => !b.secret).length;
+            const secretCnt = ownedBrawlers.filter(b => b.secret).length;
+            collectionSpan.innerText = normalCount;
+            secretCountSpan.innerText = secretCnt;
+        }
+        
+        function renderInventory() {
+            if(ownedBrawlers.length === 0) { brawlersDiv.innerHTML = `<div class="empty-msg">📭 Нет бойцов... Открывай ящики!</div>`; return; }
+            let html = "";
+            ownedBrawlers.forEach(b => { 
+                const isSecret = b.secret === true;
+                html += `<div class="brawler-card ${isSecret ? 'secret' : ''}"><span>${b.emoji}</span><span>${b.name.length > 12 ? b.name.slice(0,10)+'..' : b.name}</span><span class="rarity ${isSecret ? 'secret-rarity' : ''}">${b.rarity}</span></div>`; 
+            });
+            brawlersDiv.innerHTML = html;
+            updateUI();
+        }
+        
+        function addBrawler(brawler) {
+            if(!ownedBrawlers.some(ex => ex.name === brawler.name)) { 
+                ownedBrawlers.push({...brawler}); 
+                renderInventory(); 
+                return true; 
+            }
+            return false;
+        }
+
+        function createParticles(x, y, count, isSecret = false) {
+            const color = isSecret ? ['#ff44aa', '#ff88ff', '#aa44ff'] : ['#ffcc44', '#ff8800'];
+            for(let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 40 + Math.random() * 80;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance - 30;
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = (x - 8) + 'px';
+                particle.style.top = (y - 8) + 'px';
+                particle.style.background = `radial-gradient(circle, ${color[i%color.length]}, ${color[0]})`;
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 600);
+            }
+            for(let i = 0; i < count*2; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'spark';
+                spark.style.left = (x + (Math.random() - 0.5) * 60) + 'px';
+                spark.style.top = (y + (Math.random() - 0.5) * 60) + 'px';
+                spark.style.background = isSecret ? '#ffaaff' : '#fff7a0';
+                spark.style.setProperty('--tx', (Math.random() - 0.5) * 120 + 'px');
+                spark.style.setProperty('--ty', (Math.random() - 0.5) * 100 - 50 + 'px');
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 500);
+            }
+        }
+
+        function animateCrateOpen(callback, isSecretBig = false) {
+            const rect = crateElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            crateElement.classList.add('shake-active');
+            setTimeout(() => crateElement.classList.remove('shake-active'), 400);
+            setTimeout(() => {
+                crateElement.classList.add('open-animation');
+                createParticles(centerX, centerY, 28, isSecretBig);
+                const iconSpan = crateElement.querySelector('span:first-child');
+                const originalIcon = iconSpan.innerText;
+                iconSpan.innerText = '💥';
+                setTimeout(() => {
+                    iconSpan.innerText = originalIcon;
+                    crateElement.classList.remove('open-animation');
+                }, 400);
+            }, 200);
+            setTimeout(() => { if(callback) callback(); }, 500);
+        }
+
+        // Открытие 1 ящика (только обычные бойцы)
+        function openMegaCrateWithAnim() {
+            if(globalCoins < 100) {
+                resultArea.innerHTML = "⚠️ НЕ ХВАТАЕТ МОНЕТ! Поиграй в Flappy Bit или купи донат! ⚠️";
+                return;
+            }
+            animateCrateOpen(() => {
+                globalCoins -= 100;
+                updateUI();
+                const drawn = getRandomBrawler(false); // секретки НЕ выпадают
+                const isNew = addBrawler(drawn);
+                let rarityColor = "#FFDB7E";
+                if(drawn.rarity === "Легендарный") rarityColor = "#ff7043";
+                else if(drawn.rarity === "Эпический") rarityColor = "#ce93ff";
+                else if(drawn.rarity === "Сверхредкий") rarityColor = "#4fc3f7";
+                const newTag = isNew ? " 🆕 НОВЫЙ МЕМ!" : " (уже в мемотеке)";
+                resultArea.innerHTML = `<div style="font-size:2rem;">${drawn.emoji}</div><div><strong style="color:${rarityColor};">${drawn.name}</strong> [${drawn.rarity}] ${newTag}</div><div>💰 -100 монет | Обычных: ${ownedBrawlers.filter(b=>!b.secret).length}/100 | Секретных: ${ownedBrawlers.filter(b=>b.secret).length}/10</div>`;
+                if(navigator.vibrate) navigator.vibrate(80);
+                resultArea.style.background = "#2a6b4e";
+                setTimeout(() => resultArea.style.background = "#05161cd9", 400);
+            });
+        }
+
+        // Открытие 100 ящиков (секретные бойцы выпадают здесь!)
+        function open100Crates() {
+            const cost = 9000;
+            if(globalCoins < cost) {
+                resultArea.innerHTML = `⚠️ НЕ ХВАТАЕТ МОНЕТ! Нужно ${cost} монет для 100 ящиков. ⚠️`;
+                return;
+            }
+            animateCrateOpen(() => {
+                globalCoins -= cost;
+                updateUI();
+                let newBrawlersCount = 0;
+                let newSecretCount = 0;
+                let rarityStats = { "Обычный":0, "Редкий":0, "Сверхредкий":0, "Эпический":0, "Легендарный":0, "СЕКРЕТНЫЙ":0 };
+                let newBrawlersList = [];
+                let newSecretList = [];
+                
+                for(let i = 0; i < 100; i++) {
+                    // При открытии 100 ящиков есть шанс на секретных бойцов (10% шанс на секретку в каждом ящике)
+                    let drawSecret = Math.random() < 0.12; // 12% шанс на секретного бойца в 100-пачке
+                    let drawn;
+                    if(drawSecret && SECRET_BRAWLERS.length > 0) {
+                        const randomSecret = SECRET_BRAWLERS[Math.floor(Math.random() * SECRET_BRAWLERS.length)];
+                        drawn = {...randomSecret};
+                    } else {
+                        drawn = getRandomBrawler(false);
+                    }
+                    rarityStats[drawn.rarity] = (rarityStats[drawn.rarity] || 0) + 1;
+                    const wasNew = addBrawler(drawn);
+                    if(wasNew) {
+                        newBrawlersCount++;
+                        if(drawn.secret) {
+                            newSecretCount++;
+                            newSecretList.push(drawn);
+                        } else {
+                            newBrawlersList.push(drawn);
+                        }
+                    }
+                }
+                
+                let secretHtml = "";
+                if(newSecretList.length > 0) {
+                    secretHtml = `<div style="color:#ff66ff; font-weight:bold; margin-top:8px;">🔮 СЕКРЕТНЫЕ БОЙЦЫ ВЫПАЛИ! 🔮 ${newSecretList.map(s=>s.emoji).join(' ')} (${newSecretCount} новых)</div>`;
+                    resultArea.classList.add('secret-animation');
+                    setTimeout(() => resultArea.classList.remove('secret-animation'), 1500);
+                }
+                
+                let statsHtml = `
+                    <div style="font-size:1.2rem; font-weight:bold;">🔥 100 МЕМНЫХ МЕГАЯЩИКОВ ОТКРЫТО! 🔥</div>
+                    <div>💰 -9000 монет</div>
+                    <div>⭐ Обычных: ${rarityStats["Обычный"] || 0} | 🟢 Редких: ${rarityStats["Редкий"] || 0}</div>
+                    <div>🔵 Сверхредких: ${rarityStats["Сверхредкий"] || 0} | 🟣 Эпических: ${rarityStats["Эпический"] || 0} | 🔴 Легендарных: ${rarityStats["Легендарный"] || 0}</div>
+                    <div>💎 СЕКРЕТНЫХ: ${rarityStats["СЕКРЕТНЫЙ"] || 0}</div>
+                    <div>🆕 НОВЫХ МЕМОВ: ${newBrawlersCount - newSecretCount} | НОВЫХ СЕКРЕТНЫХ: ${newSecretCount}</div>
+                    ${secretHtml}
+                    <div>📊 Всего собрано: ${ownedBrawlers.filter(b=>!b.secret).length}/100 обычных, ${ownedBrawlers.filter(b=>b.secret).length}/10 секретных</div>
+                `;
+                resultArea.innerHTML = statsHtml;
+                resultArea.style.background = "#2a5f4b";
+                setTimeout(() => resultArea.style.background = "#05161cd9", 2000);
+                if(navigator.vibrate) navigator.vibrate(200);
+                renderInventory();
+                if(ownedBrawlers.filter(b=>b.secret).length === 10) {
+                    resultArea.innerHTML += "<br>🏆 НЕВЕРОЯТНО! ТЫ СОБРАЛ ВСЕХ СЕКРЕТНЫХ БОЙЦОВ! 🏆";
+                }
+            }, true);
+        }
+
+        // Магазин кейсов и донат
+        const casePacks = [
+            { amount: 1, priceCoins: 90, name: "1 Мемный ящик", emoji: "🎁" },
+            { amount: 3, priceCoins: 250, name: "3 Мемных ящика", emoji: "🎁🎁🎁" },
+            { amount: 5, priceCoins: 400, name: "5 Мемных ящиков", emoji: "💎💎" }
+        ];
+        function buyCasePack(pack) {
+            if(globalCoins < pack.priceCoins) {
+                resultArea.innerHTML = `⚠️ Не хватает монет! Нужно ${pack.priceCoins} монет. ⚠️`;
+                return;
+            }
+            globalCoins -= pack.priceCoins;
+            updateUI();
+            let newBrawlersCount = 0;
+            let rewards = [];
+            for(let i = 0; i < pack.amount; i++) {
+                const b = getRandomBrawler(false);
+                if(addBrawler(b)) newBrawlersCount++;
+                rewards.push(b.emoji);
+            }
+            resultArea.innerHTML = `<div>✨ Куплен ${pack.name} ✨</div><div>Открыто мемов: ${pack.amount} (новых: ${newBrawlersCount})</div><div>${rewards.join(' ')}</div><div>Обычных: ${ownedBrawlers.filter(b=>!b.secret).length}/100 | Секретных: ${ownedBrawlers.filter(b=>b.secret).length}/10</div>`;
+            if(navigator.vibrate) navigator.vibrate(80);
+            renderInventory();
+        }
+        
+        const donatePacks = [
+            { coins: 250, price: "1.99$", name: "START", icon: "💎" },
+            { coins: 750, price: "4.99$", name: "MEGA", icon: "💰" },
+            { coins: 2000, price: "9.99$", name: "LEGENDARY", icon: "👑" },
+            { coins: 5000, price: "19.99$", name: "ULTIMATE", icon: "🔥" }
+        ];
+        function donateCoins(amount) {
+            globalCoins += amount;
+            updateUI();
+            resultArea.innerHTML = `💖 СПАСИБО ЗА ДОНАТ! +${amount} 🪙 монет! СЕКРЕТНЫЕ бойцы ждут тебя в 100-ящиках! 💖`;
+            if(navigator.vibrate) navigator.vibrate(100);
+            setTimeout(() => {
+                if(resultArea.innerHTML.includes("СПАСИБО ЗА ДОНАТ")) resultArea.innerHTML = "✨ Открывай 100 ящиков разом, чтобы получить секретных бойцов! ✨";
+            }, 3000);
+        }
+        
+        function renderShopAndDonate() {
+            const container = document.getElementById("shopCoinsContainer");
+            let html = "";
+            casePacks.forEach(pack => {
+                html += `<div class="coin-card" data-pack='${JSON.stringify(pack)}'><div class="coin-amount">${pack.emoji} ${pack.name}</div><div class="coin-price">💰 ${pack.priceCoins} 🪙</div><button class="buy-btn">Купить</button></div>`;
+            });
+            container.innerHTML = html;
+            document.querySelectorAll('#shopCoinsContainer .coin-card').forEach(card => {
+                const btn = card.querySelector('.buy-btn');
+                const packData = JSON.parse(card.getAttribute('data-pack'));
+                btn.addEventListener('click', (e) => { e.stopPropagation(); buyCasePack(packData); });
+            });
+            const donateContainer = document.getElementById("donateContainer");
+            let donateHtml = "";
+            donatePacks.forEach(pack => {
+                donateHtml += `<div class="coin-card" data-donate='${JSON.stringify(pack)}'><div class="coin-amount">${pack.icon} +${pack.coins} 🪙</div><div class="coin-price">💲 ${pack.price}</div><button class="donate-btn">Купить</button></div>`;
+            });
+            donateContainer.innerHTML = donateHtml;
+            document.querySelectorAll('#donateContainer .coin-card').forEach(card => {
+                const btn = card.querySelector('.donate-btn');
+                const packData = JSON.parse(card.getAttribute('data-donate'));
+                btn.addEventListener('click', (e) => { e.stopPropagation(); donateCoins(packData.coins); });
+            });
+        }
+
+        openBtn.addEventListener('click', openMegaCrateWithAnim);
+        open100Btn.addEventListener('click', open100Crates);
+        crateElement.addEventListener('click', openMegaCrateWithAnim);
+        renderShopAndDonate();
+        updateUI();
+        renderInventory();
+
+        window.addCoinsFromFlappy = function(earnedCoins) {
+            globalCoins += earnedCoins;
+            updateUI();
+            resultArea.innerHTML = `🎉 +${earnedCoins} монет за игру! Накопи на 100 ящиков, чтобы получить СЕКРЕТНЫХ БОЙЦОВ! 🎉`;
+            setTimeout(() => { if(resultArea.innerHTML.includes("монет за игру")) resultArea.innerHTML = "✨ 100 обычных + 10 секретных бойцов ждут! Жми на 100 ящиков! ✨"; }, 3000);
+        };
+    })();
+
+    // *************************************************************
+    // ********** FLAPPY BIT (ЗАРАБОТОК МОНЕТ) *********************
+    // *************************************************************
+    (function(){
+        const canvas = document.getElementById('flappyCanvas');
+        const ctx = canvas.getContext('2d');
+        const WIDTH = 400, HEIGHT = 550;
+        canvas.width = WIDTH; canvas.height = HEIGHT;
+        let gameRunning = true, score = 0, bestScore = localStorage.getItem('flappyBitBest') ? parseInt(localStorage.getItem('flappyBitBest')) : 0;
+        document.getElementById('bestValue').innerText = bestScore;
+        const BIRD_WIDTH = 28, BIRD_HEIGHT = 28;
+        let bird = { x: 70, y: HEIGHT/2, velocity: 0, gravity: 0.25, jumpPower: -5.2, rotation: 0 };
+        const PIPE_WIDTH = 52, PIPE_GAP = 130, PIPE_SPACING = 210;
+        let pipes = [], pipeSpawnCounter = 65, groundY = HEIGHT - 50, frame = 0;
+        function createPipe() { const minHeight = 50, maxHeight = HEIGHT - PIPE_GAP - minHeight - 50; const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight); return { x: WIDTH, top: topHeight, bottom: topHeight + PIPE_GAP, counted: false }; }
+        function initGame() { gameRunning = true; score = 0; document.getElementById('scoreValue').innerText = score; bird.y = HEIGHT/2; bird.velocity = 0; bird.rotation = 0; pipes = []; pipeSpawnCounter = 65; for(let i=0;i<2;i++) { let np=createPipe(); np.x = WIDTH + i*PIPE_SPACING; pipes.push(np); } }
+        function updateBest() { if(score>bestScore) { bestScore=score; localStorage.setItem('flappyBitBest',bestScore); document.getElementById('bestValue').innerText=bestScore; } }
+        function jump() { if(!gameRunning) return; bird.velocity = bird.jumpPower; if(navigator.vibrate) navigator.vibrate(20); bird.rotation = -0.45; }
+        function updateGame() {
+            if(!gameRunning) return;
+            bird.velocity += bird.gravity; bird.y += bird.velocity; bird.rotation = Math.min(Math.max(bird.velocity*0.12, -0.8), 0.9);
+            if(bird.y - BIRD_HEIGHT/2 <= 0 || bird.y + BIRD_HEIGHT/2 >= groundY) { gameRunning=false; updateBest(); return; }
+            pipeSpawnCounter++; if(pipeSpawnCounter >= PIPE_SPACING) { pipes.push(createPipe()); pipeSpawnCounter=0; }
+            for(let i=0;i<pipes.length;i++) { pipes[i].x -= 2.4; if(pipes[i].x+PIPE_WIDTH<0) { pipes.splice(i,1); i--; } }
+            const birdLeft = bird.x - BIRD_WIDTH/2, birdRight = bird.x + BIRD_WIDTH/2, birdTop = bird.y - BIRD_HEIGHT/2, birdBottom = bird.y + BIRD_HEIGHT/2;
+            for(let p of pipes) {
+                if(birdRight > p.x && birdLeft < p.x+PIPE_WIDTH) { if(birdTop < p.top || birdBottom > p.bottom) { gameRunning=false; updateBest(); return; } }
+                if(!p.counted && p.x+PIPE_WIDTH < bird.x) { p.counted=true; score++; document.getElementById('scoreValue').innerText = score; if(window.addCoinsFromFlappy) window.addCoinsFromFlappy(5); if(navigator.vibrate) navigator.vibrate(15); }
+            }
+        }
+        function drawBackground() { const grad = ctx.createLinearGradient(0,0,0,HEIGHT); grad.addColorStop(0,'#6bc8e8'); grad.addColorStop(0.7,'#4aa0c0'); ctx.fillStyle=grad; ctx.fillRect(0,0,WIDTH,HEIGHT); ctx.fillStyle='#ffffffcc'; for(let i=0;i<3;i++) { ctx.beginPath(); ctx.ellipse(70+i*130+frame*0.2%500,70+i*45,35,28,0,0,Math.PI*2); ctx.fill(); } }
+        function drawGround() { ctx.fillStyle='#936e38'; ctx.fillRect(0,groundY,WIDTH,HEIGHT-groundY); ctx.fillStyle='#6b4c2c'; for(let i=0;i<12;i++) ctx.fillRect(i*45+(frame%45),groundY+3,25,9); ctx.fillStyle='#c99e54'; ctx.fillRect(0,groundY-3,WIDTH,5); }
+        function drawBird() { ctx.save(); ctx.translate(bird.x,bird.y); ctx.rotate(bird.rotation); ctx.fillStyle='#FFC857'; ctx.fillRect(-BIRD_WIDTH/2,-BIRD_HEIGHT/2,BIRD_WIDTH,BIRD_HEIGHT); ctx.fillStyle='#E8A735'; ctx.fillRect(-BIRD_WIDTH/2+4,-BIRD_HEIGHT/5,18,12); ctx.fillStyle='#FFFFFF'; ctx.beginPath(); ctx.arc(6,-4,6,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#000000'; ctx.beginPath(); ctx.arc(8,-5,2.8,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#F57C00'; ctx.beginPath(); ctx.moveTo(14,-4); ctx.lineTo(24,-2); ctx.lineTo(14,2); ctx.fill(); ctx.restore(); }
+        function drawPipes() { for(let p of pipes) { ctx.fillStyle='#3F784C'; ctx.fillRect(p.x,0,PIPE_WIDTH,p.top); ctx.fillStyle='#2E5A38'; ctx.fillRect(p.x-4,p.top-28,PIPE_WIDTH+8,28); ctx.fillStyle='#3F784C'; ctx.fillRect(p.x,p.bottom,PIPE_WIDTH,HEIGHT-p.bottom); ctx.fillStyle='#2E5A38'; ctx.fillRect(p.x-4,p.bottom,PIPE_WIDTH+8,28); } }
+        function drawUI() { ctx.font='bold 28px monospace'; ctx.fillStyle='white'; ctx.shadowBlur=3; ctx.fillText(`${score}`,WIDTH/2-15,70); ctx.font='bold 16px monospace'; ctx.fillStyle='#F5F0C6'; ctx.fillText("FLAPPY BIT",WIDTH/2-60,38); if(!gameRunning) { ctx.font='bold 22px monospace'; ctx.fillStyle='#FF4F4F'; ctx.fillText("GAME OVER",WIDTH/2-80,HEIGHT/2-40); ctx.font='14px monospace'; ctx.fillStyle='#ffe1a0'; ctx.fillText("НАЖМИ НОВАЯ ИГРА",WIDTH/2-85,HEIGHT/2+20); } }
+        function draw() { drawBackground(); drawPipes(); drawGround(); drawBird(); drawUI(); frame++; }
+        function animate() { if(gameRunning) updateGame(); draw(); requestAnimationFrame(animate); }
+        function handleJump(e) { if(e.type==='keydown' && (e.code==='Space'||e.code==='ArrowUp'||e.code==='KeyW')) { e.preventDefault(); jump(); } else if(e.type !== 'keydown') jump(); }
+        function restartGame() { initGame(); document.getElementById('scoreValue').innerText='0'; if(score>bestScore) { bestScore=score; localStorage.setItem('flappyBitBest',bestScore); document.getElementById('bestValue').innerText=bestScore; } gameRunning=true; bird.velocity=0; bird.y=HEIGHT/2; }
+        window.addEventListener('keydown', handleJump); canvas.addEventListener('click', (e)=> { e.preventDefault(); jump(); }); canvas.addEventListener('touchstart', (e)=> { e.preventDefault(); jump(); }); document.getElementById('restartButton').addEventListener('click', ()=>{ restartGame(); }); canvas.addEventListener('contextmenu', e=>e.preventDefault());
+        initGame(); animate();
+    })();
+</script>
+</body>
+</html>
